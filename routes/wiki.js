@@ -7,7 +7,11 @@ var User = models.User;
 module.exports = router;
 
 router.get('/', function(req, res, next){
-  res.render('index');
+   Page.findAll()
+  .then(function(foundPage){
+    // res.json(foundPage);
+    res.render('index', {pages: foundPage});
+  });
 });
 
 router.post('/', function(req, res, next){
@@ -22,12 +26,29 @@ router.post('/', function(req, res, next){
 
   console.log('req.body is: ', req.body);
   page.save()
-      .then(res.json(page));
+      .then(function(savedPage){
+        res.redirect(savedPage.route)
+      }).catch(next);
 
 });
 
 router.get('/add', function(req, res, next){
   res.render('addpage');
+});
+
+router.get('/:page', function(req, res, next){
+  // res.send('hit dynamic route at ' + req.params.page);
+  console.log('page is ', req.params.page);
+  Page.findAll({
+      where: {
+        urlTitle: req.params.page
+      }
+  })
+  .then(function(foundPage){
+    // res.json(foundPage);
+    res.render('wikipage', {content: foundPage[0]});
+  })
+  .catch(next);
 });
 
 
