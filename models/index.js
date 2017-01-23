@@ -11,7 +11,7 @@ var Page = db.define('page', {
 	urlTitle: {
 		type: Sequelize.STRING,
 		allowNull: false,
-		isUrl: true
+		// isUrl: true
 	},
 	content: {
 		type: Sequelize.TEXT,
