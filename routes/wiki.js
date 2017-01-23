@@ -16,26 +16,50 @@ router.get('/', function(req, res, next){
 
 router.post('/', function(req, res, next){
 
+  User.findOrCreate({
+    where: {
+      name: req.body.name,
+      email: req.body.email
+    }
+  })
+  .then(function (values) {
 
-  var page = Page.findOrCreate({
-  title: req.body.title,
-  content: req.body.content,
-  status: req.body.status
+    var user = values[0];
 
-  });
+    var page = Page.build({
+      title: req.body.title,
+      content: req.body.content,
+      status: req.body.status
+    });
 
-  var user = User.findOrCreate({
-    name: req.body.name,
-    email: req.body.email
+    return page.save().then(function (page) {
+      return page.setAuthor(user);
+    });
+  })
+  .then(function (page) {
+    res.redirect(page.route);
+  })
+  .catch(next);
 
-  });
+  // var page = Page.findOrCreate({
+  // title: req.body.title,
+  // content: req.body.content,
+  // status: req.body.status
 
-  console.log('req.body is: ', req.body);
-  page.save()
-    .then(user.save())
-      .then(function(savedPage){
-        res.redirect(savedPage.route);
-      }).catch(next);
+  // });
+
+  // var user = User.findOrCreate({
+  //   name: req.body.name,
+  //   email: req.body.email
+
+  // });
+
+  // console.log('req.body is: ', req.body);
+  // page.save()
+  //   .then(user.save())
+  //     .then(function(savedPage){
+  //       res.redirect(savedPage.route);
+  //     }).catch(next);
 
 });
 
