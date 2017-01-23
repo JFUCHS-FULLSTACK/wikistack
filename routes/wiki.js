@@ -11,21 +11,23 @@ router.get('/', function(req, res, next){
 });
 
 router.post('/', function(req, res, next){
+
+
   var page = Page.build({
   title: req.body.title,
   content: req.body.content,
-  urlTitle: '/' + req.body.title,
   status: req.body.status
 
   });
 
   console.log('req.body is: ', req.body);
   page.save()
-      .then(res.redirect('/'));
+      .then(res.json(page));
 
 });
 
 router.get('/add', function(req, res, next){
   res.render('addpage');
 });
+
 

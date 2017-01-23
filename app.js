@@ -23,7 +23,7 @@ app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
 
 app.get('/', function(req, res, next){
-  res.render('./views');
+  res.render('./');
   });
 
 app.use('/wiki', wikiRouter);

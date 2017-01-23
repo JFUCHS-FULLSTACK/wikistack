@@ -27,7 +27,7 @@ var Page = db.define('page', {
 }, {
 	getterMethods: {
 		route: function()  { return '/wiki/' + this.urlTitle; }
-  }
+  },
 });
 
 var User = db.define('user', {
@@ -41,6 +41,13 @@ var User = db.define('user', {
 		allowNull: false,
 		isEmail: true
 	}
+});
+Page.hook('beforeValidate', function(page){
+	if (page.title) {
+				page.urlTitle = page.title.replace(/\s+/g, '_').replace(/\W/g, '');
+			} else {
+				page.urlTitle = Math.random().toString(36).substring(2, 7);
+			}
 });
 
 module.exports = {
