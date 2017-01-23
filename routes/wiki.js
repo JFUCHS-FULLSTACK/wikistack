@@ -9,25 +9,32 @@ module.exports = router;
 router.get('/', function(req, res, next){
    Page.findAll()
   .then(function(foundPage){
-    // res.json(foundPage);
-    res.render('index', {pages: foundPage});
+    res.json(foundPage);
+    // res.render('index', {pages: foundPage});
   });
 });
 
 router.post('/', function(req, res, next){
 
 
-  var page = Page.build({
+  var page = Page.findOrCreate({
   title: req.body.title,
   content: req.body.content,
   status: req.body.status
 
   });
 
+  var user = User.findOrCreate({
+    name: req.body.name,
+    email: req.body.email
+
+  });
+
   console.log('req.body is: ', req.body);
   page.save()
+    .then(user.save())
       .then(function(savedPage){
-        res.redirect(savedPage.route)
+        res.redirect(savedPage.route);
       }).catch(next);
 
 });

@@ -50,6 +50,8 @@ Page.hook('beforeValidate', function(page){
 			}
 });
 
+Page.belongsTo(User, {as: 'author'});
+
 module.exports = {
   Page: Page,
   User: User
