@@ -6,7 +6,8 @@ const path = require('path');
 const app = express();
 const wikiRouter = require('./routes/wiki');
 var models = require('./models');
-
+var Page = models.Page;
+var User = models.User;
 
 app.use(morgan('dev'));
 
@@ -30,9 +31,9 @@ app.get('/', function(req, res, next){
 
 app.use('/wiki', wikiRouter);
 
-models.User.sync({ force: true })
+User.sync({ force: true })
 .then(function () {
-    return models.Page.sync({ force: true });
+    return Page.sync({ force: true });
 })
 .then(function () {
     app.listen(3000, function () {

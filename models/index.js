@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('postgres://localhost:5432/wikistack', {
-	// logging: false
+	logging: false
 });
 
 var Page = db.define('page', {
@@ -39,7 +39,10 @@ var User = db.define('user', {
 	email: {
 		type: Sequelize.STRING,
 		allowNull: false,
-		isEmail: true
+		unique: true,
+		validate: {
+			isEmail: true
+		}
 	}
 });
 Page.hook('beforeValidate', function(page){
